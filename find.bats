@@ -1,5 +1,6 @@
 #!/usr/bin/env bats
 
+#Note: These tests will only pass on the student machine (not student2).
 
 #The find function takes as input a starting directory
 #and a string  and returns the path to files found

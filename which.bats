@@ -1,5 +1,6 @@
 #!/usr/bin/env bats
 
+#Note: These tests will only pass on the student machine (not student2).
 
 #The which function takes one argument that is the
 #name of a program. It then uses the value
