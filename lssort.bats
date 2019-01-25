@@ -11,7 +11,7 @@
 #lssort size - outputs a sort of ls -l where the sort is
 #       a numeric of the size  
 #lssort month - outputs a sort of ls -l where the
-#       sort is an alphabetic sort of the month
+#       sort is a sort of the month (jan < feb < ...)
 #lssort day - outputs a sort of ls -l where the
 #       sort is a numeric sort of the day 
 #lssort name - outputs a sort of ls -l where the

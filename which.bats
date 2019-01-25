@@ -1,6 +1,5 @@
 #!/usr/bin/env bats
 
-#Note: These tests will only pass on the student machine (not student2).
 
 #The which function takes one argument that is the
 #name of a program. It then uses the value
@@ -9,7 +8,7 @@
 #that would be executed if the name is typed
 #at the shell prompt. (It does the same thing
 #as the linux which command.)
-#If the program cannot be found it echos
+#If the program can not be found it returns
 #"no $1"
 #In either case, it returns 0.
 #If no argument can be found, it prints
@@ -38,10 +37,10 @@ which() {
    [ $status -eq 0 ] 
 }
 
-#should find the path to python
-@test "which python" {
-   run which "python"
-   correct=$(/usr/bin/which python)
+#should find the path to pats
+@test "which bats" {
+   run which "bats"
+   correct=$(/usr/bin/which bats)
    echo "$output"
    [ "$output" = "$correct" ]
    [ $status -eq 0 ] 

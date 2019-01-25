@@ -1,13 +1,13 @@
 #!/usr/bin/env bats
 
-#Write a script that takes as input the name of the of a text file, 
+#The normwhite function takes as input the name of a text file, 
 #reads the contents of the file line by line, and outputs each line after 
 #normalizing whitespace.  Runs of spaces and/or tabs must be replaced by a 
 #single space.  All end of line whitespace must be removed.
 #If the text file exists, the function returns 0.
 #
 #If no argument can be found or the text file doesn't exist, it prints
-#usage: normwhite <program>
+#usage: normwhite <textfile>
 #and returns 1.
 normwhite() {
 #
