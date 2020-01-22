@@ -16,6 +16,11 @@ normwhite() {
 # We don't want echo to do the work for you so you should use: 
 #     echo -e | sed
 #
+  if ! [ -f "$1" ]; then  
+      echo "usage: normwhite <textfile>";
+      return 1
+      fi
+  cat "$1" | sed -r 's/^\s+//g;s/(\s\s+)/ /g;s/\t/ /g; s/\s$//g'
   return 0
 }
 
