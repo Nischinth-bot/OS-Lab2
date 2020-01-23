@@ -10,9 +10,19 @@
 #and returns 1. Otherwise, it does the extension change
 #and returns 0.
 chgext() {
-#
-# This can be used to print the error message: echo -e "usage: chgext <srcExt> <dstExt>";
-   return 0   
+    if [ "$#" -ne 2 ]; then 
+    echo -e "usage: chgext <srcExt> <dstExt>"
+    return 1
+    fi
+    ls *.$1 > files.txt
+    old_ext="."$1
+    new_ext="."$2
+    for ln in `cat files.txt`; do
+    var=$(echo "$ln" | sed "s/$old_ext/$new_ext/g")
+    mv $ln $var
+    done
+
+  return 0   
 }
 
 #test moving .C files to .cpp
