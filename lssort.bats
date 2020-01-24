@@ -23,8 +23,42 @@
 #If an argument is not either day, size, month, or name
 #then the function returns 1
 lssort() {
-  return 0
+      if [ "$#" -eq 0 ]; then 
+          ls -l | sort
+          return 0
+          fi
+ flags=""
+ for arg in "$@"; do
+     if [ "$arg" != "size" ] && [ "$arg" != "day" ] \
+         && [ "$arg" != "month" ] && [ "$arg" != "name" ]; then return 1
+         fi
+     flags=$(echo "$flags $(getflag $arg)")   
+     done 
+ ls -l | sort $flags
+ return 0
 }
+
+getflag()
+{
+          case $1 in
+          size)
+          echo "-k5n"
+          ;;
+          month) 
+          echo "-k6M" 
+          ;;
+          day)
+          echo "-k7n" 
+          ;;
+          name)
+          echo "-k9" 
+          ;;
+          *)
+          ;;
+          esac
+}
+
+
 
 #test lssort with no arguments
 @test "lssort" {
