@@ -14,11 +14,43 @@
 #If no argument can be found, it prints
 #usage: which <program>
 #and returns 1.
-which() {
-#
-# This can be used to print the error message: echo "usage: which <program>";
-   return 0
+
+which(){
+if [ "$#" -eq 0 ]; then 
+    echo  "usage: which <program>" 
+    return 1
+    fi
+echo "$PATH" | tr ":" "\n" > dirs.txt
+for ln in `cat dirs.txt`; do
+if [ -d "$ln" ]; then
+var=$(explore "$ln" $1)
+if ! [ "$var" = "" ]; then
+    echo "$var"
+    return 0
+    fi
+fi
+done
+echo "no $1"
+return 0
 }
+
+explore()
+{
+    ls -l "$1" | grep "^d" | awk '{print $9}' > temp_dirs.txt
+    ls -l "$1" | grep "^[-,l]" | awk '{print $9}' > temp_files.txt
+    for file in `cat temp_files.txt`; do
+    if [ "$file" = "$2" ]; then
+        echo "$1/$file" 
+        return
+        fi
+    done
+    for dir in `cat temp_dirs.txt`; do
+        explore "$1/$dir" $2
+    done
+}
+
+
+
 
 #should output usage info and return 1 if
 #no argument given
