@@ -1,6 +1,5 @@
 #!/usr/bin/env bats
 
-
 #The find function takes as input a starting directory
 #and a string  and returns the path to files found
 #in the starting directory or subdirectory whose name contains
@@ -25,10 +24,71 @@
 #Otherwise the function displays the paths and returns 0.
 #
 #Hint: add a recursive function that is called by find.
-find() {
-  #use this as your error message:    echo "usage: find [-d <n>] path expr"
-  return 0
+
+find(){
+
+numreg="[0-9]+"
+alphanumeric="^[0-9a-ZA-Z]+$"
+nums="^[0-9]+$"
+if [ "$#" -eq 4 ]; then
+    if ! [ $1 = "-d"  ] ||  ! [[ $2 =~ $nums ]] || ! [[ -d "$3" ]] || ! [[ $4 =~ $alphanumeric ]]; then
+        echo  "usage: find [-d <n>] path expr" 
+        return 1
+        fi
+        explore $2 $3 $4
+        return 0 
+fi
+
+if [ "$#" -eq 3 ]; then
+    if ! [ $1 = "-d"  ] ||  ! [[ -d "$2" ]] || ! [[ $3 =~ $alphanumeric ]]; then
+        echo  "usage: find [-d <n>] path expr" 
+        return 1
+        fi
+        explore 2 $2 $3
+        return 0 
+fi
+
+echo  "usage: find [-d <n>] path expr" 
+return 1
+
 }
+
+explore() #$1 - depth // #2 dir // #3 file
+{ 
+    if [ "$1" -gt 0 ]; then
+    ls -l "$2" | grep "^d......r" | awk '{print $9}' > temp_dirs.txt
+    ls -l "$2" | grep "^-" | awk '{print $9}' > temp_files.txt 
+    ls -l "$2" | grep "^l" | awk '{print $9}' > temp_links.txt
+    regex="$3"
+    for link in `cat temp_links.txt`; do
+        echo "$2/$link" >> links.txt
+        if [[ -f "$2/$link" ]];then
+            echo "$link" >> temp_files.txt
+            fi
+        if [[ -d "$2/$link" ]];then
+            var=$(echo $(ls  "$2/$link") | grep "$3")
+            for ln in $var; do
+                echo "$2/$link/$ln"
+                done
+            fi
+        done
+    for file in `cat temp_files.txt`; do 
+    if [[ $file =~ $regex ]]; then
+        echo "$2/$file" 
+        fi
+    done
+    for dir in `cat temp_dirs.txt`; do
+        var=$1
+        var=$((var - 1))
+        if [[ $dir =~ $regex ]]; then
+            echo "$2/$dir" 
+            fi
+        explore $var "$2/$dir" $3
+    done
+    return
+    fi
+}
+
 
 #test passing a bad path to find
 @test "find badpath expr" {
