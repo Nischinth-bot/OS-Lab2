@@ -25,8 +25,27 @@
 #outputs the message: usage: backup <srcdir> <destdir> 
 #Otherwise, backup returns 0 in addition to doing the backup.
 backup() {
-  # you can use this to print error message: echo "usage: backup <srcdir> <destdir>"
-  return 0
+  if ! [[ -d "$1" ]] || ! [[ -d "$2" ]]; then
+  echo "usage: backup <srcdir> <destdir>"
+  return 1
+  fi
+  numtars=$(ls -l "$2" | grep ".tgz$" | wc -l)
+  if [ $numtars -lt 3 ]; then
+      var="$1-$numtars.tgz" 
+      tar cf $var $1
+      mv $var $2
+      return 0
+      else
+          firstfile=$(ls "$2" | sort | grep "$1" | awk 'NR == 1')
+          N=$(ls "$2" | sort | sed -r 's/^.*([0-9]).tgz$/\1/'| awk 'NR == 3')
+          N=$((N + 1))
+          rm "$2/$firstfile"
+          var="$1-$N.tgz"
+          tar cf $var $1
+          mv $var $2
+          return 0
+          fi
+
 }
 
 #test creating one backup
