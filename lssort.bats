@@ -32,7 +32,7 @@ lssort() {
      if [ "$arg" != "size" ] && [ "$arg" != "day" ] \
          && [ "$arg" != "month" ] && [ "$arg" != "name" ]; then return 1
          fi
-     flags=$(echo "$flags $(getflag $arg)")   
+     flags="$flags $(getflag $arg)"
      done 
  ls -l | sort $flags
  return 0
